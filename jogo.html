@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ninjas</title>
+    <link rel="stylesheet" href="jogo.css">
+</head>
+
+<body>
+    <header class="hud">
+        <div class="player-ui">
+            <div class="life-bar">
+                <div id="vida-ninja1" class="life-fill">
+                    <p class="player-name">Ninja 1</p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p id="rounds-ninja1" class="rounds">💀 Rounds: 0</p>
+                <p id="fireball-ninja1" class="rounds">🔥 Firebol: 3</p>
+            </div>
+
+        </div>
+
+        <div class="center-ui">
+            <p id="timer" class="timer">50</p>
+            <p id="round-atual" class="round-label">Round 1</p>
+            <p id="mensagem-round" class="round-message"></p>
+            <button id="pause-btn" class="pause-btn" type="button">Pausar</button>
+        </div>
+
+        <div class="player-ui">
+            <div class="life-bar">
+                <div id="vida-ninja2" class="life-fill">
+                    <p class="player-name">Ninja 2</p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p id="rounds-ninja2" class="rounds">💀 Rounds: 0</p>
+                <p id="fireball-ninja2" class="rounds">🔥 Firebol: 3</p>
+            </div>
+
+        </div>
+    </header>
+
+    <p id="overlay-texto" class="overlay-text"></p>
+    <div id="flash-overlay" class="flash-overlay"></div>
+    <div id="fatality-screen" class="fatality-screen">FATALITY</div>
+    <div id="golpes-modal" class="golpes-modal" aria-hidden="true">
+        <div class="golpes-card" role="dialog" aria-modal="true" aria-labelledby="golpes-titulo">
+            <div class="golpes-header">
+                <h2 id="golpes-titulo">Lista de golpes</h2>
+                <button id="fechar-golpes-btn" class="fechar-golpes-btn" type="button" aria-label="Fechar">X</button>
+            </div>
+            <p class="golpes-subtitulo">Ninja 1 | Ninja 2</p>
+            <ul class="golpes-lista">
+                <li><strong>Movimento:</strong> W  S A D SHIFT(DIR) | CIMA BAIXO ESQUERDA DIREITA ENTER | 8 5 4 6 ENTER</li>
+                <li><strong>Modo Power:</strong> Segurar Q | Segurar SHIFT(ESQ) | Segurar 7 </li>
+                <li><strong>FireBol:</strong> S S SHIFT(ESQ)| BAIXO BAIXO ENTER | 5 5 ENTER</li>
+                <li><strong>Modo Pinguim:</strong> CLICAR SHIFT, ENTER (OVO) | S SHIFT S W | BAIXO ENTER BAIXO CIMA | 5 ENTER 5 8</li>
+                <li><strong>Lentidão (2x por partida):</strong> W S W SHIFT | CIMA BAIXO CIMA SHIFT | 8 5 8 ENTER</li>
+                <li><strong>Mini Ninja:</strong> S S W W | BAIXO BAIXO CIMA CIMA | 5 5 8 8</li>
+                <li><strong>Inverter Controles (2x por partida):</strong> W SHIFT S S | CIMA SHIFT BAIXO BAIXO | 8 SHIFT 5 5</li>
+                <li><strong>Fatality:</strong> ? ? ? ?</li>
+                <!-- <li><strong>Fatality:</strong> S S W S SHIFT | BAIXO BAIXO CIMA BAIXO SHIFT | 5 5 8 5 SHIFT</li> -->
+
+                
+            </ul>
+        </div>
+    </div>
+    <audio id="musica-tema" src="./img/musica.mp4" loop preload="auto"></audio>
+
+    <main>
+        <section>
+            <div>
+                <img src="./img/ninja2.png" id="ninja2" class="ninja2" alt="Ninja 2">
+            </div>
+            <div>
+                <img src="./img/ninja1.png" id="ninja1" class="ninja1" alt="Ninja 1">
+            </div>
+        </section>
+    </main>
+    <div class="power-ui power-ui-left">
+        <p class="power-label">Poder Ninja 1</p>
+        <div class="power-bar">
+            <div id="power-ninja1" class="power-fill"></div>
+        </div>
+    </div>
+    <div class="power-ui power-ui-right">
+        <p class="power-label">Poder Ninja 2</p>
+        <div class="power-bar">
+            <div id="power-ninja2" class="power-fill"></div>
+        </div>
+    </div>
+    <button id="golpes-btn" class="pause-btn golpes-btn" type="button">Lista de golpes</button>
+    <script src="script2.js"></script>
+    <script src="animacoes.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
