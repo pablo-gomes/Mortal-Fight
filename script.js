@@ -39,6 +39,24 @@ const ninjaDoisAndandoImg = "./img/andando1.png";
 const ninjaDoisAtordoado = "./img/atordoado2.png";
 const ninjaDoisDano = "./img/dano.png";
 
+
+// Imagens de animação de lentidão
+const ninjaUmLentidaoImg = "./img/lentidao1.png";
+const ninjaDoisLentidaoImg = "./img/lentidao2.png";
+
+// Imagens de animação de confusão (controles invertidos)
+const ninjaUmConfusoImg = "./img/confuso1.png";
+const ninjaDoisConfusoImg = "./img/confuso2.png";
+
+const ninjaUmPower = "./img/modoPower1.png";
+const ninjaDoisPower = "./img/modoPower2.png";
+
+const ninjaUmSocandoPowerImg = "./img/atacandopower1.png";
+const ninjaDoisSocandoPowerImg = "./img/atacandopower2.png";
+
+const ninjaUmDefendendoPowerImg = "./img/defesapower1.png";
+const ninjaDoisDefendendoPowerImg = "./img/defesapower2.png";
+
 const estadoJogo = {
   PLAYING: "playing",
   ROUND_TRANSITION: "round_transition",
@@ -60,7 +78,7 @@ const compensacaoPinguimY = 36;
 const vidaInicial = 100;
 const danoSocoNormal = 5;
 const danoSocoDefendido = 3;
-const danoSocoNormalComPoder = 9;
+const danoSocoNormalComPoder = 6;
 const danoSocoDefendidoComPoder = 2;
 const tempoRoundSegundos = 90;
 const cooldownSoco = 400;
@@ -93,11 +111,16 @@ const limiteUsosPoderEspecial = 2;
 const multiplicadorVelocidadeLentidao = 0.2;
 const intervaloAnimacaoAndandoMs = 120;
 const sombraDefesa = "drop-shadow(0 0 16px #ffff00)";
-const sombraDano = "drop-shadow(0 0 16px #ff0000)";
-const sombraPoder = "drop-shadow(0 0 16px #2fe6ff)";
-const sombraLentidao = "drop-shadow(0 0 16px #ff4fc3)";
+const sombraDano = "drop-shadow(10px 0 10px #ff0000)";
+const sombraPoder = "drop-shadow(0 0 0 #2fe6ff)";
+const sombraLentidao = "drop-shadow(0 0 0 #ff4fc3)";
 const sombraControlesInvertidos = "drop-shadow(0 0 16px #31ff6f)";
 
+function playSound(path) {
+  const audio = new Audio(path);
+  audio.volume = 0.5;
+  audio.play().catch(() => { });
+}
 let timerNinjaUm = null;
 let timerNinjaDois = null;
 let cooldownNinjaUm = null;
@@ -124,6 +147,17 @@ let timerControlesInvertidosNinjaUm = null;
 let timerControlesInvertidosNinjaDois = null;
 let timerMiniNinjaUm = null;
 let timerMiniNinjaDois = null;
+// Variáveis para animação de lentidão
+let ultimoFrameLentidaoNinjaUm = 0;
+let ultimoFrameLentidaoNinjaDois = 0;
+let frameLentidaoNinjaUmAtivo = false;
+let frameLentidaoNinjaDoisAtivo = false;
+
+// Variáveis para animação de confusão (controles invertidos)
+let ultimoFrameConfusoNinjaUm = 0;
+let ultimoFrameConfusoNinjaDois = 0;
+let frameConfusoNinjaUmAtivo = false;
+let frameConfusoNinjaDoisAtivo = false;
 
 let deslocamentoNinjaUm = 0;
 let deslocamentoNinjaDois = 0;
@@ -454,6 +488,7 @@ function ativarPoderNinjaUm() {
   poderAtivoNinjaUm = true;
   poderNinjaUm = poderMaximo;
   ninjaUm.classList.add("power-active");
+  trocarImagemSuave(ninjaUm, ninjaUmPower);
   atualizarBarrasPoder();
 
   if (timerPoderNinjaUm) {
@@ -471,6 +506,7 @@ function ativarPoderNinjaDois() {
   poderAtivoNinjaDois = true;
   poderNinjaDois = poderMaximo;
   ninjaDois.classList.add("power-active");
+  trocarImagemSuave(ninjaDois, ninjaDoisPower);
   atualizarBarrasPoder();
 
   if (timerPoderNinjaDois) {
@@ -488,6 +524,7 @@ function desativarPoderNinjaUm() {
   poderAtivoNinjaUm = false;
   poderNinjaUm = 0;
   ninjaUm.classList.remove("power-active");
+  trocarImagemSuave(ninjaUm, ninjaUmNormal);
   atualizarBarrasPoder();
 
   if (timerPoderNinjaUm) {
@@ -500,6 +537,7 @@ function desativarPoderNinjaDois() {
   poderAtivoNinjaDois = false;
   poderNinjaDois = 0;
   ninjaDois.classList.remove("power-active");
+  trocarImagemSuave(ninjaDois, ninjaDoisNormal);
   atualizarBarrasPoder();
 
   if (timerPoderNinjaDois) {
@@ -553,6 +591,10 @@ function desativarLentidaoNinjaUm() {
     clearTimeout(timerLentidaoNinjaUm);
     timerLentidaoNinjaUm = null;
   }
+
+  if (!ninjaUmPulandoAgora && !ninjaUmSocandoAgora && !ninjaUmDefendendo && !modoPinguimNinjaUmAtivo) {
+    trocarImagemSuave(ninjaUm, ninjaUmNormal);
+  }
 }
 
 function desativarLentidaoNinjaDois() {
@@ -561,6 +603,10 @@ function desativarLentidaoNinjaDois() {
   if (timerLentidaoNinjaDois) {
     clearTimeout(timerLentidaoNinjaDois);
     timerLentidaoNinjaDois = null;
+  }
+
+  if (!ninjaDoisPulandoAgora && !ninjaDoisSocandoAgora && !ninjaDoisDefendendo && !modoPinguimNinjaDoisAtivo) {
+    trocarImagemSuave(ninjaDois, ninjaDoisNormal);
   }
 }
 
@@ -576,6 +622,10 @@ function desativarControlesInvertidosNinjaUm() {
     clearTimeout(timerControlesInvertidosNinjaUm);
     timerControlesInvertidosNinjaUm = null;
   }
+
+  if (!ninjaUmPulandoAgora && !ninjaUmSocandoAgora && !ninjaUmDefendendo && !modoPinguimNinjaUmAtivo) {
+    trocarImagemSuave(ninjaUm, ninjaUmNormal);
+  }
 }
 
 function desativarControlesInvertidosNinjaDois() {
@@ -584,6 +634,10 @@ function desativarControlesInvertidosNinjaDois() {
   if (timerControlesInvertidosNinjaDois) {
     clearTimeout(timerControlesInvertidosNinjaDois);
     timerControlesInvertidosNinjaDois = null;
+  }
+
+  if (!ninjaDoisPulandoAgora && !ninjaDoisSocandoAgora && !ninjaDoisDefendendo && !modoPinguimNinjaDoisAtivo) {
+    trocarImagemSuave(ninjaDois, ninjaDoisNormal);
   }
 }
 
@@ -611,6 +665,9 @@ function ativarControlesInvertidosNoNinja(alvo) {
         desativarControlesInvertidosNinjaUm();
       });
     }, duracaoControlesInvertidosMs);
+    if (!ninjaUmPulandoAgora && !ninjaUmSocandoAgora && !ninjaUmDefendendo && !modoPinguimNinjaUmAtivo) {
+      trocarImagemSuave(ninjaUm, ninjaUmNormal);
+    }
     return true;
   }
 
@@ -625,6 +682,9 @@ function ativarControlesInvertidosNoNinja(alvo) {
       desativarControlesInvertidosNinjaDois();
     });
   }, duracaoControlesInvertidosMs);
+  if (!ninjaDoisPulandoAgora && !ninjaDoisSocandoAgora && !ninjaDoisDefendendo && !modoPinguimNinjaDoisAtivo) {
+    trocarImagemSuave(ninjaDois, ninjaDoisNormal);
+  }
   return true;
 }
 
@@ -670,6 +730,9 @@ function ativarLentidaoNoNinja(alvo) {
         desativarLentidaoNinjaUm();
       });
     }, duracaoLentidaoMs);
+    if (!ninjaUmPulandoAgora && !ninjaUmSocandoAgora && !ninjaUmDefendendo && !modoPinguimNinjaUmAtivo) {
+      trocarImagemSuave(ninjaUm, ninjaUmNormal);
+    }
     return true;
   }
 
@@ -684,6 +747,9 @@ function ativarLentidaoNoNinja(alvo) {
       desativarLentidaoNinjaDois();
     });
   }, duracaoLentidaoMs);
+  if (!ninjaDoisPulandoAgora && !ninjaDoisSocandoAgora && !ninjaDoisDefendendo && !modoPinguimNinjaDoisAtivo) {
+    trocarImagemSuave(ninjaDois, ninjaDoisNormal);
+  }
   return true;
 }
 
@@ -1354,7 +1420,7 @@ function atualizarSombrasCombate() {
     if (!socoNinjaUmJaAcertou) {
       const dano = ninjaDoisDefendendo
         ? (poderAtivoNinjaDois ? danoSocoDefendidoComPoder : danoSocoDefendido)
-        : (poderAtivoNinjaDois ? danoSocoNormalComPoder : danoSocoNormal);
+        : (poderAtivoNinjaUm ? danoSocoNormalComPoder : danoSocoNormal);
       const acertou = aplicarDanoNoNinjaDois(dano);
       if (acertou && !ninjaDoisDefendendo) {
         ganharPoderNinjaDois(incrementoPoderSoco);
@@ -1375,7 +1441,7 @@ function atualizarSombrasCombate() {
     if (!socoNinjaDoisJaAcertou) {
       const dano = ninjaUmDefendendo
         ? (poderAtivoNinjaUm ? danoSocoDefendidoComPoder : danoSocoDefendido)
-        : (poderAtivoNinjaUm ? danoSocoNormalComPoder : danoSocoNormal);
+        : (poderAtivoNinjaDois ? danoSocoNormalComPoder : danoSocoNormal);
       const acertou = aplicarDanoNoNinjaUm(dano);
       if (acertou && !ninjaUmDefendendo) {
         ganharPoderNinjaUm(incrementoPoderSoco);
