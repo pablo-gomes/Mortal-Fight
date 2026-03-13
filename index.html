@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mortal fight</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <img src="./img/ninja2socando.png" class="img2">
-    <img src="./img/defesa.png" class="img1">
-    <button><a href="jogo.html">Iniciar jogo</a></button>
+    <img src="./img/ovo_pinguim.png" class="img1">
+<button><a href="jogo.html">Iniciar jogo</a></button>
     <img src="./img/pinguim.png" alt="" class="img3">
     <img src="./img/logo.png" alt="" class="img4">
-    
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="./img/fundoindex.mp4" type="video/mp4">
+    </video>
+    <audio id="musica-tema" src="img/musica.mp3" loop preload="auto"></audio>
+    <script>
+        const musica = document.getElementById("musica-tema");
+        if (musica) {
+            musica.volume = 0.20;
+            // Tenta tocar assim que a página carrega
+            musica.play().catch(() => {
+                // Se o navegador bloquear o som automático, toca no primeiro clique
+                document.addEventListener("click", () => {
+                    musica.play();
+                }, { once: true });
+            });
+        }
+    </script>
 </body>
+
 </html>
