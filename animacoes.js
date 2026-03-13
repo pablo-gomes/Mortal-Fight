@@ -1,4 +1,5 @@
 function trocarImagemSuave(elemento, novaImagem) {
+console.log('animacoes.js carregado');
   if (elemento === ninjaUm && modoPinguimNinjaUmAtivo) {
     novaImagem = ninjaPinguim;
   }
@@ -7,9 +8,44 @@ function trocarImagemSuave(elemento, novaImagem) {
     novaImagem = ninjaPinguim;
   }
 
+  if (elemento === ninjaUm && controlesInvertidosNinjaUm && !modoPinguimNinjaUmAtivo) {
+    if (novaImagem === ninjaUmNormal || novaImagem === ninjaUmAndandoImg || novaImagem === ninjaUmPower) {
+      novaImagem = ninjaUmConfusoImg;
+    }
+  }
+  if (elemento === ninjaDois && controlesInvertidosNinjaDois && !modoPinguimNinjaDoisAtivo) {
+    if (novaImagem === ninjaDoisNormal || novaImagem === ninjaDoisAndandoImg || novaImagem === ninjaDoisPower) {
+      novaImagem = ninjaDoisConfusoImg;
+    }
+  }
+  if (elemento === ninjaUm && lentoNinjaUm && !controlesInvertidosNinjaUm && !modoPinguimNinjaUmAtivo) {
+    if (novaImagem === ninjaUmNormal || novaImagem === ninjaUmAndandoImg || novaImagem === ninjaUmPower) {
+      novaImagem = ninjaUmLentidaoImg;
+    }
+  }
+  if (elemento === ninjaDois && lentoNinjaDois && !controlesInvertidosNinjaDois && !modoPinguimNinjaDoisAtivo) {
+    if (novaImagem === ninjaDoisNormal || novaImagem === ninjaDoisAndandoImg || novaImagem === ninjaDoisPower) {
+      novaImagem = ninjaDoisLentidaoImg;
+    }
+  }
+
+  if (elemento === ninjaUm && poderAtivoNinjaUm && novaImagem === ninjaUmNormal) {
+    novaImagem = ninjaUmPower;
+  } else if (elemento === ninjaUm && poderAtivoNinjaUm && novaImagem === ninjaUmAndandoImg) {
+    novaImagem = ninjaUmPower; // or power walking if exists
+  }
+
+  if (elemento === ninjaDois && poderAtivoNinjaDois && novaImagem === ninjaDoisNormal) {
+    novaImagem = ninjaDoisPower;
+  } else if (elemento === ninjaDois && poderAtivoNinjaDois && novaImagem === ninjaDoisAndandoImg) {
+    novaImagem = ninjaDoisPower;
+  }
+
   setTimeout(() => {
     elemento.src = novaImagem;
   }, tempoFade);
+
+
 }
 
 function animarNinjaUm() {
@@ -97,7 +133,7 @@ function acaoNinjaUm() {
 
   ninjaUmDefendendo = true;
   ninjaUmSocandoAgora = false;
-  trocarImagemSuave(ninjaUm, ninjaUmAcao);
+  trocarImagemSuave(ninjaUm, poderAtivoNinjaUm ? ninjaUmDefendendoPowerImg : ninjaUmAcao);
 }
 
 function acaoNinjaDois() {
@@ -107,7 +143,7 @@ function acaoNinjaDois() {
 
   ninjaDoisDefendendo = true;
   ninjaDoisSocandoAgora = false;
-  trocarImagemSuave(ninjaDois, ninjaDoisDefendendoImg);
+  trocarImagemSuave(ninjaDois, poderAtivoNinjaDois ? ninjaDoisDefendendoPowerImg : ninjaDoisDefendendoImg);
 }
 
 function socoNinjaUm(forcar = false) {
@@ -122,7 +158,7 @@ function socoNinjaUm(forcar = false) {
   ninjaUmSocandoAgora = true;
   ninjaUmDefendendo = false;
   socoNinjaUmJaAcertou = false;
-  trocarImagemSuave(ninjaUm, ninjaUmSocandoImg);
+  trocarImagemSuave(ninjaUm, poderAtivoNinjaUm ? ninjaUmSocandoPowerImg : ninjaUmSocandoImg);
 
   if (timerSocoNinjaUm) {
     clearTimeout(timerSocoNinjaUm);
@@ -164,7 +200,7 @@ function socoNinjaDois(forcar = false) {
   ninjaDoisSocandoAgora = true;
   ninjaDoisDefendendo = false;
   socoNinjaDoisJaAcertou = false;
-  trocarImagemSuave(ninjaDois, ninjaDoisSocandoImg);
+  trocarImagemSuave(ninjaDois, poderAtivoNinjaDois ? ninjaDoisSocandoPowerImg : ninjaDoisSocandoImg);
 
   if (timerSocoNinjaDois) {
     clearTimeout(timerSocoNinjaDois);
@@ -233,11 +269,11 @@ function animarDanoNinjaDois() {
       if (ninjaDoisPulandoAgora) {
         trocarImagemSuave(ninjaDois, ninjaDoisPulando);
       } else if (ninjaDoisSocandoAgora) {
-        trocarImagemSuave(ninjaDois, ninjaDoisSocandoImg);
+        trocarImagemSuave(ninjaDois, poderAtivoNinjaDois ? ninjaDoisSocandoPowerImg : ninjaDoisSocandoImg);
       } else if (ninjaDoisDefendendo) {
-        trocarImagemSuave(ninjaDois, ninjaDoisDefendendoImg);
+        trocarImagemSuave(ninjaDois, poderAtivoNinjaDois ? ninjaDoisDefendendoPowerImg : ninjaDoisDefendendoImg);
       } else {
-        trocarImagemSuave(ninjaDois, ninjaDoisNormal);
+        trocarImagemSuave(ninjaDois, poderAtivoNinjaDois ? ninjaDoisPower : ninjaDoisNormal);
       }
 
       timerAnimacaoDanoNinjaDois = null;
@@ -262,11 +298,11 @@ function animarDanoNinjaUm() {
       if (ninjaUmPulandoAgora) {
         trocarImagemSuave(ninjaUm, ninjaUmPulando);
       } else if (ninjaUmSocandoAgora) {
-        trocarImagemSuave(ninjaUm, ninjaUmSocandoImg);
+        trocarImagemSuave(ninjaUm, poderAtivoNinjaUm ? ninjaUmSocandoPowerImg : ninjaUmSocandoImg);
       } else if (ninjaUmDefendendo) {
-        trocarImagemSuave(ninjaUm, ninjaUmAcao);
+        trocarImagemSuave(ninjaUm, poderAtivoNinjaUm ? ninjaUmDefendendoPowerImg : ninjaUmAcao);
       } else {
-        trocarImagemSuave(ninjaUm, ninjaUmNormal);
+        trocarImagemSuave(ninjaUm, poderAtivoNinjaUm ? ninjaUmPower : ninjaUmNormal);
       }
 
       timerAnimacaoDanoNinjaUm = null;
