@@ -21,19 +21,28 @@ body {
     position: fixed;
 }
 
-body::after {
-    content: "";
+#bg-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
     width: 100%;
     height: 100%;
-    background: url('./img/fundo.png');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
     z-index: -1;
-    opacity: 0.8;
-    filter: blur(2px);
+    object-fit: cover;
+    filter: blur(4px);
+    will-change: transform;
 }
+
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
 button {
     position: absolute;
     top: 45%;
@@ -41,7 +50,7 @@ button {
     transform: translate(-50%, -50%);
     width: 300px;
     height: 50px;
-    background: linear-gradient(to bottom, #D8260C, #DB4E0F,  #E47220, #E9A03F, #ECAD3C, #F0B949, #F3C157, #F5D165, #F7E173, #F9F181);
+    background: linear-gradient(to bottom, #D8260C, #DB4E0F, #E47220, #E9A03F, #ECAD3C, #F0B949, #F3C157, #F5D165, #F7E173, #F9F181);
     border: 2px solid white;
     border-radius: 10px;
     color: white;
@@ -57,40 +66,46 @@ button {
     z-index: 2;
 
 }
+
 button:hover {
     background-color: #ffffff8a;
 }
+
 a {
     text-decoration: none;
     color: #000;
     cursor: pointer;
 }
+
 .img1 {
     position: absolute;
-    top: 10%;
-    left: 7%;
-    width: 25%; 
-    height: 90%;
+    top: 75%;
+    left: 59%;
+    width: 9%;
+    height: 17%;
 }
+
 .img2 {
     position: absolute;
     top: 10%;
     right: 7%;
-    width: 25%; 
+    width: 25%;
     height: 90%;
 }
+
 .img3 {
     position: absolute;
     bottom: 0;
     left: 35%;
-    width: 30%; 
+    width: 30%;
     height: 60%;
 }
+
 .img4 {
     position: absolute;
     top: 20%;
     right: 33%;
-    width: 35%; 
+    width: 35%;
     height: 15%;
     border-radius: 0 30px 0 30px;
     border: solid white 2px;
